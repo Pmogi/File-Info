@@ -1,39 +1,53 @@
-'''
-Patrick Mogianesi
-June 13 2016
-fileinfo script
+# Alarm clock
+# Loop and print the time
+# Activate a random youtube video if the time is equal 
+# Patrick Mogianesi /June 15th 2016/
 
-This program will get the information of a chosen file:
-The size of the file.
-The Name of file.
-How old the file is.
-'''
-#the user inputs the path for the file
+######################################################
 
-#os.path allows for paths to be understood by the computer
-import os, os.path
+#When putting into command line, input, python Alarm.py YT.txt
 
-def main():
-	print "CTRL-C to exit"
-	#input for user
-	path = raw_input("Input path of file > ")
-	
-	#this list takes 3 functions, and finds values for them
-	#basename = name of file
-	#getsize = size of file
-	#getntime = age of file
-	x = [os.path.basename(path), os.path.getsize(path), os.path.getmtime(path)]
-	
-	#Simply prints out the info calling for information from the list.
-	print "The files name is %r." % x[0]
-	
-	print "The program is %r bytes big." % x[1]
+######################################################
 
-	print "The file is %r seconds old." % x[2]
-	
-	#sends user back start of the script
-	main()
-	
+# This stack  overflow helped http://stackoverflow.com/questions/3277503/how-to-read-a-file-line-by-line-into-a-list-with-python
 
-#starts script by calling main function
-main()
+#Import libraries
+import time
+import webbrowser
+import random
+
+#The User can set the time they want to wake up. The String the user puts in must be the same as the example to work.
+print "What time do you want to wake up?"
+print "Use this form.\nExample: 06:30:00"
+Alarm = raw_input("> ")
+
+
+#I first need to state the Time variable so it's usable in the while-loop
+Time = time.strftime("%H:%M:%S")
+
+#This opens the text file with the youtube links
+with open("YT.txt") as f:
+	#the urls are stored in the content variable 
+	content = f.readlines()
+
+
+#When the Time does not equal the Alarm time string given above, print the time
+while Time != Alarm:
+	
+	print "The time is " + Time
+	
+	#Restating the Time variable allows the time to refresh
+	#When I tried keeping the variable outside of the loop it just repeated the inital time
+	Time = time.strftime("%H:%M:%S")
+	
+	#This keeps the loop from flooding the command line with updates of the time :P
+	time.sleep(1)
+
+#If the Time variable is equal to the Alarm string, this code activates
+if Time == Alarm:
+
+	print "Time to Wake up!"
+	#from the variable content, a random link is chosen and then that link is stored in random_video variable
+	random_video = random.choice(content)
+	#Using the webbrowser library, it opens this youtube video link.
+	webbrowser.open(random_video)
